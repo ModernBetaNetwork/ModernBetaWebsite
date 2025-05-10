@@ -2,6 +2,56 @@
 import { Image } from "astro:assets";
 import Logo from "../assets/ModernBetaLogoFull.png";
 import "../styles/navbar.css";
+
+type NavBarItem = {
+	target?: string;
+	href: string;
+	label: string;
+};
+
+type NavBarGroup = {
+	title: string;
+	items: NavBarItem[];
+};
+
+const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
+	{
+		href: "/",
+		label: "Home",
+	},
+	{
+		href: "/rules",
+		label: "Rules",
+	},
+	{
+		href: "/socials",
+		label: "Socials",
+	},
+	{
+		href: "https://store.modernbeta.org",
+		target: "_blank",
+		label: "Store",
+	},
+	{
+		href: "https://map.modernbeta.org",
+		target: "_blank",
+		label: "Map",
+	},
+	{
+		title: "Wiki",
+		items: [
+			{
+				href: "https://web.archive.org/web/20110902065819/http://www.minecraftwiki.net:80/wiki/Minecraft_Wiki",
+				target: "_blank",
+				label: "Beta 1.7.3 Wiki",
+			},
+			{
+				href: "https://modernbeta.miraheze.org/wiki/Main_Page",
+				label: "Community Wiki",
+			},
+		],
+	},
+];
 ---
 
 <nav>
@@ -11,52 +61,60 @@ import "../styles/navbar.css";
 				<Image src={Logo} alt="Modern Beta" />
 			</a>
 			<div id="nav-links" class="desktop-only">
-				<a href="/">Home</a>
-				<a href="/rules">Rules</a>
-				<a href="/socials">Socials</a>
-				<a target="_blank" href="https://store.modernbeta.org/">Store</a>
-				<a target="_blank" href="https://map.modernbeta.org">Map</a>
-				<div class="dropdown">
-					Wiki
-					<div class="dropdown-content">
-						<a
-							target="_blank"
-							href="https://web.archive.org/web/20110902065819/http://www.minecraftwiki.net:80/wiki/Minecraft_Wiki"
-							>Beta 1.7.3 Wiki</a
-						>
-						<a
-							target="_blank"
-							href="https://modernbeta.miraheze.org/wiki/Main_Page"
-							>Community Wiki</a
-						>
-					</div>
-				</div>
-			</div>
-		</div>
+				{
+					NAV_BAR_ITEMS.map((item) => {
+						if ("title" in item) {
+							return (
+								<div class="dropdown">
+									{item.title}
+									<div class="dropdown-content">
+										{item.items.map((item) => (
+											<a href={item.href} target={item.target}>
+												{item.label}
+											</a>
+										))}
+									</div>
+								</div>
+							);
+						}
 
-		<div class="right">
-			<button id="nav-menu-btn" class="mobile-only" onclick="togglenav()"
-				><img class="pixel-perfect" src="/images/icons/open_menu.png" alt="Menu" /></button
-			>
-			<a href="/play" class="play-button-container"
-				><button id="join-now-button" class="desktop-only play-now-button">Play Now!</button></a
-			>
-		</div>
-		<div id="mobile-nav-dropdown" class="mobile-only pixel-perfect">
-			<a href="/play">Play</a>
-			<a href="/rules">Rules</a>
-			<a target="_blank" href="https://discord.gg/gXmjuejWtD">Discord</a>
-			<a href="/socials">Socials</a>
-			<a target="_blank" href="https://store.modernbeta.org/">Store</a>
-			<a target="_blank" href="https://map.modernbeta.org">Map</a>
-			<a
-				target="_blank"
-				href="https://web.archive.org/web/20110902065819/http://www.minecraftwiki.net:80/wiki/Minecraft_Wiki"
-				>Beta 1.7.3 Wiki</a
-			>
-			<a target="_blank" href="https://modernbeta.miraheze.org/wiki/Main_Page"
-				>Community Wiki</a
-			>
+						return (
+							<a href={item.href} target={item.target}>
+								{item.label}
+							</a>
+						);
+					})
+				}
+			</div>
+
+			<div class="right">
+				<button id="nav-menu-btn" class="mobile-only" onclick="togglenav()"
+					><img
+						class="pixel-perfect"
+						src="/images/icons/open_menu.png"
+						alt="Menu"
+					/></button
+				>
+				<a href="/play" class="play-button-container"
+					><button id="join-now-button" class="desktop-only play-now-button"
+						>Play Now!</button
+					></a
+				>
+			</div>
+			<div id="mobile-nav-dropdown" class="mobile-only pixel-perfect">
+				{
+					NAV_BAR_ITEMS.flatMap((item) => {
+						if ("title" in item) return item.items;
+						return item;
+					}).map((item) => {
+						return (
+							<a href={item.href} target={item.target}>
+								{item.label}
+							</a>
+						);
+					})
+				}
+			</div>
 		</div>
 	</div>
 </nav>
