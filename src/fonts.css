@@ -1,16 +1,28 @@
 @font-face {
 	font-family: minecraft;
-	src: url("../fonts/minecraftregular.otf");
+	src: url("/fonts/minecraftregular.otf") format("opentype");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
 }
 @font-face {
 	font-family: minecraft-alt;
-	src: url("../fonts/minecraftregular_backup.ttf");
+	src: url("/fonts/minecraftregular_backup.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
 }
 @font-face {
 	font-family: minecraft-bold;
-	src: url("../fonts/minecraftbold.otf");
+	src: url("/fonts/minecraftbold.otf") format("opentype");
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
 }
 @font-face {
 	font-family: minecraft-italic;
-	src: url("../fonts/minecraftitalic.otf");
+	src: url("/fonts/minecraftitalic.otf") format("opentype");
+	font-weight: normal;
+	font-style: italic;
+	font-display: swap;
 }

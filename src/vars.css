@@ -27,9 +27,3 @@
 	--verticalSpacing: 45px;
 	--horizontalSpacing: 15px;
 }
-
-@media screen and (max-width: 1100px) {
-	:root {
-		--navBarHeight: 100px;
-	}
-}

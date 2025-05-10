@@ -1,18 +1,19 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "../assets/ModernBetaLogoFull.png";
+import "../styles/navbar.css";
 ---
 
 <nav>
 	<div class="nav-content">
 		<div class="left">
-			<a href="#" id="nav-logo">
+			<a href="/" id="nav-logo">
 				<Image src={Logo} alt="Modern Beta" />
 			</a>
 			<div id="nav-links" class="desktop-only">
-				<a href="#">Home</a>
-				<a href="rules">Rules</a>
-				<a href="socials">Socials</a>
+				<a href="/">Home</a>
+				<a href="/rules">Rules</a>
+				<a href="/socials">Socials</a>
 				<a target="_blank" href="https://store.modernbeta.org/">Store</a>
 				<a target="_blank" href="https://map.modernbeta.org">Map</a>
 				<div class="dropdown">
@@ -34,21 +35,19 @@ import Logo from "../assets/ModernBetaLogoFull.png";
 		</div>
 
 		<div class="right">
-			<button id="nav-menu-btn" class="mobile-only" onclick="togglenav('')"
-				><img class="pixel-perfect" src="images/icons/open_menu.png" /></button
+			<button id="nav-menu-btn" class="mobile-only" onclick="togglenav()"
+				><img class="pixel-perfect" src="/images/icons/open_menu.png" alt="Menu" /></button
 			>
-			<a href="play"
-				><button id="join-now-button" class="desktop-only">Play Now!</button></a
+			<a href="/play" class="play-button-container"
+				><button id="join-now-button" class="desktop-only play-now-button">Play Now!</button></a
 			>
 		</div>
 		<div id="mobile-nav-dropdown" class="mobile-only pixel-perfect">
-			<a href="play">Play</a>
-			<a href="rules">Rules</a>
+			<a href="/play">Play</a>
+			<a href="/rules">Rules</a>
 			<a target="_blank" href="https://discord.gg/gXmjuejWtD">Discord</a>
-			<a href="socials">Socials</a><a
-				target="_blank"
-				href="https://store.modernbeta.org/">Store</a
-			>
+			<a href="/socials">Socials</a>
+			<a target="_blank" href="https://store.modernbeta.org/">Store</a>
 			<a target="_blank" href="https://map.modernbeta.org">Map</a>
 			<a
 				target="_blank"
@@ -62,122 +61,4 @@ import Logo from "../assets/ModernBetaLogoFull.png";
 	</div>
 </nav>
 
-<style>
-	nav {
-		width: 100vw;
-		height: var(--navBarHeight);
-		background: linear-gradient(
-			180deg,
-			var(--skyDarkBlueTop) 0%,
-			var(--skyDarkBlueBot) 75%
-		);
-		padding: 10px 25px;
-		box-shadow: var(--perspectiveBoxShadow);
-		border-bottom: 2px solid black;
-		position: fixed;
-		top: 0;
-		z-index: 10;
-	}
-
-	#nav-content {
-		max-width: 1500px;
-		height: 100%;
-		display: block;
-		margin: 0 auto;
-		z-index: 11;
-	}
-
-	nav .left {
-		display: flex;
-		height: 100%;
-		float: left;
-	}
-
-	nav .right {
-		display: inline-block;
-		height: 100%;
-		float: right;
-	}
-
-	#nav-logo img {
-		height: 100%;
-		box-sizing: border-box;
-	}
-
-	#nav-logo {
-		padding: 0 20px 0px 0px;
-		display: inline-block;
-		height: 100%;
-	}
-
-	#nav-logo:hover {
-		background: none;
-		border: none;
-	}
-
-	#nav-links {
-		display: flex;
-		height: 100%;
-		position: relative;
-		align-items: center;
-	}
-
-	#nav-links a,
-	#nav-links .dropdown {
-		padding: 16px 25px;
-		font-size: 1.25em;
-		text-transform: uppercase;
-		text-shadow: var(--mcTextShadow);
-	}
-
-	#nav-links .dropdown {
-		position: relative;
-		display: inline-block;
-	}
-
-	#nav-links .dropdown:hover {
-		background: rgba(0, 0, 0, 0.15);
-		border-bottom: none;
-		height: 73px;
-		margin-top: 13px;
-	}
-
-	#nav-links a:hover {
-		background: rgba(0, 0, 0, 0.15);
-		border-bottom: solid 5px rgba(0, 0, 0, 0.15);
-	}
-
-	#nav-links .dropdown:hover a:hover {
-		background: rgba(0, 0, 0, 0.15);
-		border-bottom: none;
-	}
-
-	.dropdown {
-		position: relative;
-	}
-
-	.dropdown-content {
-		display: none;
-		position: absolute;
-		top: 100%;
-		left: 0;
-		background: rgba(0, 0, 0, 0.6);
-		border-bottom: solid 5px rgba(0, 0, 0, 0.15);
-		min-width: fit-content;
-		text-wrap: nowrap;
-		z-index: -1;
-	}
-
-	.dropdown-content a {
-		display: block;
-		padding: 10px 15px;
-		font-size: 1em !important;
-		text-transform: none;
-		text-shadow: none;
-		text-decoration: none;
-	}
-
-	.dropdown:hover .dropdown-content {
-		display: block;
-	}
-</style>
+<script src="../scripts/mobileNav.js"></script>
