@@ -85,35 +85,35 @@ const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
 					})
 				}
 			</div>
+		</div>
 
-			<div class="right">
-				<button id="nav-menu-btn" class="mobile-only" onclick="togglenav()"
-					><img
-						class="pixel-perfect"
-						src="/images/icons/open_menu.png"
-						alt="Menu"
-					/></button
-				>
-				<a href="/play" class="play-button-container"
-					><button id="join-now-button" class="desktop-only play-now-button"
-						>Play Now!</button
-					></a
-				>
-			</div>
-			<div id="mobile-nav-dropdown" class="mobile-only pixel-perfect">
-				{
-					NAV_BAR_ITEMS.flatMap((item) => {
-						if ("title" in item) return item.items;
-						return item;
-					}).map((item) => {
-						return (
-							<a href={item.href} target={item.target}>
-								{item.label}
-							</a>
-						);
-					})
-				}
-			</div>
+		<div class="right">
+			<button id="nav-menu-btn" class="mobile-only" onclick="togglenav()"
+				><img
+					class="pixel-perfect"
+					src="/images/icons/open_menu.png"
+					alt="Menu"
+				/></button
+			>
+			<a href="/play" class="play-button-container"
+				><button id="join-now-button" class="desktop-only play-now-button"
+					>Play Now!</button
+				></a
+			>
+		</div>
+		<div id="mobile-nav-dropdown" class="mobile-only pixel-perfect">
+			{
+				NAV_BAR_ITEMS.flatMap((item) => {
+					if ("title" in item) return item.items;
+					return item;
+				}).map((item) => {
+					return (
+						<a href={item.href} target={item.target}>
+							{item.label}
+						</a>
+					);
+				})
+			}
 		</div>
 	</div>
 </nav>
@@ -177,15 +177,8 @@ const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
 		display: flex;
 		height: 100%;
 		align-items: center;
-	}
-
-	/* Right side of navbar */
-	.right {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		justify-content: flex-end;
-		overflow: visible;
+		flex: 1;
+		padding-left: 0;
 	}
 
 	/* Logo styling */
@@ -194,18 +187,14 @@ const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
 		display: flex;
 		height: 100%;
 		align-items: center;
+		margin-left: 0;
 	}
 
 	#nav-logo img {
 		height: 100%;
-		max-height: 66px;
+		max-height: 66.5px;
 		width: auto;
 		object-fit: contain;
-	}
-
-	#nav-logo:hover {
-		background: none;
-		border: none;
 	}
 
 	/* Navigation links */
@@ -214,6 +203,7 @@ const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
 		height: 100%;
 		position: relative;
 		align-items: center;
+		margin-left: 0;
 	}
 
 	#nav-links a,
@@ -310,9 +300,9 @@ const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
 			var(--logoLimeGreen) 0%,
 			var(--logoLimeGreen2) 100%
 		);
-		height: 100%;
-		margin-top: -8px;
-		margin-bottom: -9px;
+		height: 66px !important;
+		margin-top: -12px;
+		margin-bottom: -12px;
 		padding: 0 30px;
 		color: var(--logoDarkGreen);
 		font-weight: bold;
@@ -336,9 +326,9 @@ const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
 
 	/* Play Now button class */
 	.play-now-button {
-		height: 91% !important;
-		margin-top: -8px !important;
-		margin-bottom: -8px !important;
+		height: 66px !important;
+		margin-top: -12px !important;
+		margin-bottom: -12px !important;
 	}
 
 	#join-now-button:hover {
