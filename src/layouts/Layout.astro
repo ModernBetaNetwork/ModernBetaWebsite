@@ -1,7 +1,6 @@
 ---
 import "../vars.css";
 import "../fonts.css";
-import "../utils.css";
 import NavBar from "../components/NavBar.astro";
 
 interface Props {
@@ -67,7 +66,26 @@ if (defaultKeywords) {
 	</body>
 </html>
 
-<style>
+<style is:global>
+	/* Global reset and font styles */
+	*,
+	::after,
+	::before {
+		padding: 0;
+		margin: 0;
+		text-decoration: none;
+		border: 0;
+		background: none;
+		font-family: minecraft, minecraft-alt;
+		box-sizing: border-box;
+		color: white;
+		font-size: 100%;
+	}
+
+	*:focus {
+		outline: none;
+	}
+
 	html,
 	body {
 		margin: 0;

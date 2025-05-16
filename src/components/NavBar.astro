@@ -1,68 +1,151 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "../assets/ModernBetaLogoFull.png";
+
+type NavBarItem = {
+	target?: string;
+	href: string;
+	label: string;
+};
+
+type NavBarGroup = {
+	title: string;
+	items: NavBarItem[];
+};
+
+const NAV_BAR_ITEMS: (NavBarItem | NavBarGroup)[] = [
+	{
+		href: "/",
+		label: "Home",
+	},
+	{
+		href: "/rules",
+		label: "Rules",
+	},
+	{
+		href: "/socials",
+		label: "Socials",
+	},
+	{
+		href: "https://store.modernbeta.org",
+		target: "_blank",
+		label: "Store",
+	},
+	{
+		href: "https://map.modernbeta.org",
+		target: "_blank",
+		label: "Map",
+	},
+	{
+		title: "Wiki",
+		items: [
+			{
+				href: "https://web.archive.org/web/20110902065819/http://www.minecraftwiki.net:80/wiki/Minecraft_Wiki",
+				target: "_blank",
+				label: "Beta 1.7.3 Wiki",
+			},
+			{
+				href: "https://modernbeta.miraheze.org/wiki/Main_Page",
+				label: "Community Wiki",
+			},
+		],
+	},
+];
 ---
 
 <nav>
 	<div class="nav-content">
 		<div class="left">
-			<a href="#" id="nav-logo">
+			<a href="/" id="nav-logo">
 				<Image src={Logo} alt="Modern Beta" />
 			</a>
 			<div id="nav-links" class="desktop-only">
-				<a href="#">Home</a>
-				<a href="rules">Rules</a>
-				<a href="socials">Socials</a>
-				<a target="_blank" href="https://store.modernbeta.org/">Store</a>
-				<a target="_blank" href="https://map.modernbeta.org">Map</a>
-				<div class="dropdown">
-					Wiki
-					<div class="dropdown-content">
-						<a
-							target="_blank"
-							href="https://web.archive.org/web/20110902065819/http://www.minecraftwiki.net:80/wiki/Minecraft_Wiki"
-							>Beta 1.7.3 Wiki</a
-						>
-						<a
-							target="_blank"
-							href="https://modernbeta.miraheze.org/wiki/Main_Page"
-							>Community Wiki</a
-						>
-					</div>
-				</div>
+				{
+					NAV_BAR_ITEMS.map((item) => {
+						if ("title" in item) {
+							return (
+								<div class="dropdown">
+									{item.title}
+									<div class="dropdown-content">
+										{item.items.map((item) => (
+											<a href={item.href} target={item.target}>
+												{item.label}
+											</a>
+										))}
+									</div>
+								</div>
+							);
+						}
+
+						return (
+							<a href={item.href} target={item.target}>
+								{item.label}
+							</a>
+						);
+					})
+				}
 			</div>
 		</div>
 
 		<div class="right">
-			<button id="nav-menu-btn" class="mobile-only" onclick="togglenav('')"
-				><img class="pixel-perfect" src="images/icons/open_menu.png" /></button
+			<button id="nav-menu-btn" class="mobile-only" onclick="togglenav()"
+				><img
+					class="pixel-perfect"
+					src="/images/icons/open_menu.png"
+					alt="Menu"
+				/></button
 			>
-			<a href="play"
-				><button id="join-now-button" class="desktop-only">Play Now!</button></a
+			<a href="/play" class="play-button-container"
+				><button id="join-now-button" class="desktop-only play-now-button"
+					>Play Now!</button
+				></a
 			>
 		</div>
 		<div id="mobile-nav-dropdown" class="mobile-only pixel-perfect">
-			<a href="play">Play</a>
-			<a href="rules">Rules</a>
-			<a target="_blank" href="https://discord.gg/gXmjuejWtD">Discord</a>
-			<a href="socials">Socials</a><a
-				target="_blank"
-				href="https://store.modernbeta.org/">Store</a
-			>
-			<a target="_blank" href="https://map.modernbeta.org">Map</a>
-			<a
-				target="_blank"
-				href="https://web.archive.org/web/20110902065819/http://www.minecraftwiki.net:80/wiki/Minecraft_Wiki"
-				>Beta 1.7.3 Wiki</a
-			>
-			<a target="_blank" href="https://modernbeta.miraheze.org/wiki/Main_Page"
-				>Community Wiki</a
-			>
+			{
+				NAV_BAR_ITEMS.flatMap((item) => {
+					if ("title" in item) return item.items;
+					return item;
+				}).map((item) => {
+					return (
+						<a href={item.href} target={item.target}>
+							{item.label}
+						</a>
+					);
+				})
+			}
 		</div>
 	</div>
 </nav>
 
+<script src="../scripts/mobileNav.js"></script>
+
+<style is:global>
+	/* Global font styles */
+	*,
+	::after,
+	::before {
+		/* removed default styling */
+		padding: 0;
+		margin: 0;
+		text-decoration: none;
+		border: 0;
+		background: none;
+		font-family: minecraft, minecraft-alt;
+		box-sizing: border-box;
+		color: white;
+		font-size: 100%;
+	}
+
+	*:focus {
+		/* removed default styling */
+		outline: none;
+	}
+</style>
+
 <style>
+	/* Component-specific styles only */
+	/* Navbar Styles */
 	nav {
 		width: 100vw;
 		height: var(--navBarHeight);
@@ -71,75 +154,77 @@ import Logo from "../assets/ModernBetaLogoFull.png";
 			var(--skyDarkBlueTop) 0%,
 			var(--skyDarkBlueBot) 75%
 		);
-		padding: 10px 25px;
+		padding: 7px 25px;
 		box-shadow: var(--perspectiveBoxShadow);
 		border-bottom: 2px solid black;
 		position: fixed;
 		top: 0;
 		z-index: 10;
+		overflow: visible;
 	}
 
-	#nav-content {
+	.nav-content {
 		max-width: 1500px;
 		height: 100%;
-		display: block;
 		margin: 0 auto;
-		z-index: 11;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 
-	nav .left {
+	/* Left side of navbar */
+	.left {
 		display: flex;
 		height: 100%;
-		float: left;
+		align-items: center;
+		flex-shrink: 1;
+		padding-left: 0;
 	}
 
-	nav .right {
-		display: inline-block;
+	/* Logo styling */
+	#nav-logo {
+		padding: 0 18px 0 0;
+		display: flex;
 		height: 100%;
-		float: right;
+		align-items: center;
+		margin-left: 0;
 	}
 
 	#nav-logo img {
 		height: 100%;
-		box-sizing: border-box;
+		max-height: 66px;
+		width: auto;
+		object-fit: contain;
 	}
 
-	#nav-logo {
-		padding: 0 20px 0px 0px;
-		display: inline-block;
-		height: 100%;
-	}
-
-	#nav-logo:hover {
-		background: none;
-		border: none;
-	}
-
+	/* Navigation links */
 	#nav-links {
 		display: flex;
 		height: 100%;
 		position: relative;
 		align-items: center;
+		margin-left: 0;
 	}
 
 	#nav-links a,
 	#nav-links .dropdown {
-		padding: 16px 25px;
+		padding: 15px 26px;
 		font-size: 1.25em;
 		text-transform: uppercase;
 		text-shadow: var(--mcTextShadow);
+		margin: 0;
 	}
 
+	#nav-links a:first-child {
+		margin-left: 1px;
+	}
+
+	#nav-links a:nth-child(2),
+	#nav-links a:nth-child(3),
+	#nav-links a:nth-child(4),
+	#nav-links a:nth-child(5),
 	#nav-links .dropdown {
-		position: relative;
-		display: inline-block;
-	}
-
-	#nav-links .dropdown:hover {
-		background: rgba(0, 0, 0, 0.15);
-		border-bottom: none;
-		height: 73px;
-		margin-top: 13px;
+		margin-left: -2px;
 	}
 
 	#nav-links a:hover {
@@ -147,37 +232,173 @@ import Logo from "../assets/ModernBetaLogoFull.png";
 		border-bottom: solid 5px rgba(0, 0, 0, 0.15);
 	}
 
+	/* Dropdown menu */
+	.dropdown {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	#nav-links .dropdown:hover {
+		background: rgba(0, 0, 0, 0.15);
+		position: relative;
+		border-bottom: solid 5px transparent;
+	}
+
+	#nav-links .dropdown:hover::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100%;
+		height: 16px;
+		background: rgba(0, 0, 0, 0.15);
+		z-index: 10;
+	}
+
 	#nav-links .dropdown:hover a:hover {
 		background: rgba(0, 0, 0, 0.15);
 		border-bottom: none;
 	}
 
-	.dropdown {
-		position: relative;
-	}
-
 	.dropdown-content {
 		display: none;
 		position: absolute;
-		top: 100%;
+		top: calc(100% + 16px);
 		left: 0;
 		background: rgba(0, 0, 0, 0.6);
-		border-bottom: solid 5px rgba(0, 0, 0, 0.15);
-		min-width: fit-content;
+		min-width: 100%;
 		text-wrap: nowrap;
-		z-index: -1;
+		z-index: 11;
+		padding-bottom: 30px;
 	}
 
 	.dropdown-content a {
 		display: block;
-		padding: 10px 15px;
+		padding: 12px 20px;
 		font-size: 1em !important;
 		text-transform: none;
 		text-shadow: none;
 		text-decoration: none;
+		margin-bottom: 5px;
+	}
+
+	.dropdown-content a:hover {
+		background: rgba(0, 0, 0, 0.25);
+		border-bottom: none;
 	}
 
 	.dropdown:hover .dropdown-content {
 		display: block;
+	}
+
+	/* Play Now button */
+	#join-now-button {
+		background: linear-gradient(
+			180deg,
+			var(--logoLimeGreen) 0%,
+			var(--logoLimeGreen2) 100%
+		);
+		height: 66px !important;
+		margin-top: -11px;
+		margin-bottom: -12px;
+		padding: 0 30px;
+		color: var(--logoDarkGreen);
+		font-weight: bold;
+		font-size: 1.75em;
+		border: 2px solid var(--logoDarkGreen);
+		box-shadow: var(--centeredBoxShadow);
+		font-family: minecraft-bold, minecraft, sans-serif;
+		display: flex;
+		align-items: center;
+		position: relative;
+		z-index: 11;
+	}
+
+	/* Play button container */
+	.play-button-container {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		overflow: visible;
+	}
+
+	/* Play Now button class */
+	.play-now-button {
+		height: 66px !important;
+		margin-top: -11px !important;
+		margin-bottom: -12px !important;
+	}
+
+	#join-now-button:hover {
+		cursor: pointer;
+		background: var(--logoDarkGreen);
+		color: var(--logoLimeGreen);
+		border: 2px solid var(--logoLimeGreen);
+	}
+
+	/* Mobile menu button */
+	#nav-menu-btn {
+		display: none;
+		height: 100%;
+	}
+
+	#nav-menu-btn img {
+		height: 100%;
+		padding: 10px;
+	}
+
+	#nav-menu-btn:hover {
+		cursor: pointer;
+	}
+
+	/* Mobile dropdown menu */
+	#mobile-nav-dropdown {
+		display: none;
+		position: absolute;
+		text-align: center;
+		top: var(--navBarHeight);
+		right: 0;
+		background-image: url("/images/backgrounds/mobile_nav_bg.png");
+		background-size: 64px;
+		height: calc(100vh - var(--navBarHeight));
+		padding: 15px 0;
+		border-left: 2px solid black;
+		box-shadow: var(--perspectiveBoxShadow);
+		z-index: 9;
+		max-height: 100vh;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	#mobile-nav-dropdown a {
+		display: block;
+		height: auto;
+		line-height: calc(var(--navBarHeight) / 1.35);
+		padding: 0 40px;
+		font-size: 1.25em;
+		text-transform: uppercase;
+		text-shadow: var(--mcTextShadow);
+	}
+
+	#mobile-nav-dropdown a:hover {
+		background: rgba(0, 0, 0, 0.25);
+		border-bottom: none;
+	}
+
+	/* Responsive styles */
+	@media screen and (max-width: 1050px) {
+		.desktop-only {
+			display: none;
+		}
+
+		.mobile-only {
+			display: block;
+		}
+
+		#nav-logo {
+			flex-grow: 1;
+		}
 	}
 </style>
